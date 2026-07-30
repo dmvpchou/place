@@ -7,3 +7,6 @@ dist-ssr/
 
 # vite-plugin-pwa 產物
 dev-dist/
+
+# 設計 handoff：規格書、截圖與原型留在本機，不進版控
+design_handoff_place/
