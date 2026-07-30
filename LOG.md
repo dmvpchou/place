@@ -1,0 +1,102 @@
+# 開發日誌
+
+## 踩過的坑（持續累積）
+
+### 兩個 `.t-*` 字體 class 疊在同一個元素上會互蓋
+
+- **症狀**：`className={`${inputClass} t-quote-15`}` 想讓賭注①欄用明體，結果吃到黑體。
+- **原因**：兩個 class 都用 `font:` shorthand，勝負由**樣式表裡的定義順序**決定，不是 class 屬性的書寫順序。`.t-ui-15` 定義在 `.t-quote-15` 後面，所以永遠贏。
+- **解法**：`Field.tsx` 拆出不含字體的 `inputBase`，字體 class 一個元素只接一個。
+- **教訓**：語意排版 class 用 shorthand 很方便，但也讓「疊加」失效。要嘛全用 shorthand 且保證只接一個，要嘛拆成 `font-size`/`line-height` 分開寫。
+
+### 規格裡的 `lastUsedDaysAgo` 是會過期的快照
+
+- **症狀**：複製腳本後顯示「上次用在 0 天前」，但這個 0 存進 localStorage 之後永遠不會變老。
+- **原因**：設計規格的資料模型把「天數」當成儲存欄位，天數是衍生值，會隨時間改變。
+- **解法**：改存 `lastUsedDate: string | null`，畫面上用 `daysBetween(lastUsedDate, todayISO())` 算。
+- **教訓**：規格給的資料模型不是聖旨。任何「距今多久」的欄位都該存時間點，不存差值。
+
+### Tailwind v4 沒有 `duration-250`
+
+- **症狀**：進度點的寬度轉場沒有動畫。
+- **原因**：預設 duration scale 只有 75/100/150/200/300/500/700/1000，`duration-250` 不存在，class 被靜默忽略。
+- **解法**：`duration-[250ms]`。
+- **教訓**：Tailwind 對不存在的 class 不會報錯。設計稿給的非標準數值一律先確認在不在 scale 裡。
+
+### `defineConfig` 要從 `vitest/config` import
+
+- **症狀**：`vite.config.ts` 加了 `test: {...}` 之後 `tsc -b` 型別錯誤。
+- **原因**：從 `vite` import 的 `defineConfig` 不認得 `test` 欄位。
+- **解法**：`import { defineConfig } from 'vitest/config'`。
+
+### `npm audit fix` 修不掉 vite-plugin-pwa 的相依警告
+
+- **症狀**：安裝後 8 個 high severity（brace-expansion DoS），`npm audit fix` 跑完數字不變。
+- **原因**：漏洞在 `vite-plugin-pwa → workbox-build → … → brace-expansion` 這條鏈的深處，沒有 non-breaking 的修法。
+- **解法**：`package.json` 加 `"overrides": { "brace-expansion": "^5.0.9" }`，重裝後歸零。
+- **教訓**：`audit fix` 沒動靜時看的是「有沒有 non-breaking 版本」，不是「修不了」。overrides 通常可解。
+
+### PWA 的 service worker 在 dev server 下不會啟用
+
+- **症狀**：`npm run dev` 開著卻找不到 SW，也沒有任何 cache。
+- **原因**：`vite-plugin-pwa` 預設只在 build 產物啟用（沒開 `devOptions`）。
+- **解法**：離線一定要用 `npm run build && npm run preview` 驗。真正的驗法是**把 preview server 砍掉再重整**——還能載入才叫離線可用。
+
+### Chrome 的 `resize_window` 對最大化視窗無效
+
+- **症狀**：要驗 <768px 的逐題流程，呼叫 resize 顯示成功，但 `window.innerWidth` 一直是 1536。
+- **原因**：視窗被 OS 最大化/管理時，resize 不會生效。
+- **解法**：注入一個固定寬度的 iframe 指向同一個 origin：`document.body.innerHTML = '<iframe src="/" style="width:400px;height:820px">'`。iframe 的寬度會驅動裡面的 media query 與 `matchMedia`。
+
+### 在 Bash 工具裡用了 PowerShell 的 here-string
+
+- **症狀**：第一個 commit 的訊息開頭多了一行 `@`，結尾也多一個 `@`。
+- **原因**：`git commit -m @'...'@` 是 PowerShell 語法，在 Bash 裡 `@'` 只是普通字元。
+- **解法**：`git commit -F - <<'EOF' … EOF`。已用 `--amend` 修正。
+- **教訓**：這個環境兩種 shell 並存，多行字串的寫法不共用。
+
+### `taskkill` 用 WINDOWTITLE filter 殺 node 是危險且無效的
+
+- **症狀**：想停掉 preview server，用 `taskkill //F //FI "WINDOWTITLE eq *" //IM node.exe`，結果什麼都沒殺到。
+- **風險**：這條指令若真的命中，會連使用者其他無關的 node 程序一起殺掉。
+- **解法**：`netstat -ano | grep :4178` 找出 PID，再 `taskkill //F //PID <pid>`。
+- **教訓**：關掉背景服務要用 port → PID 定位，永遠不要對 `node.exe` 下 `/IM`。
+
+### git 一直跳 CRLF 警告
+
+- **症狀**：每次 `git add` 都刷一排 `LF will be replaced by CRLF`。
+- **原因**：Windows 預設 `core.autocrlf=true`，而檔案是以 LF 寫入的。
+- **現況**：不影響內容，暫時不處理。若之後覺得吵，加 `.gitattributes` 指定 `* text=auto eol=lf`。
+
+---
+
+## 2026-07-31 · 第一輪：從設計 handoff 做出第一階段
+
+**完成事項**
+
+- 建立專案骨架：Vite + React 19 + TypeScript + Tailwind v4，純前端 SPA。
+- Design tokens 與三層字體制度（`styles/theme.css`、`styles/type.css`）。
+- 資料層：localStorage 持久化、單一 store、衍生值 selectors。
+- 共用元件：Chip / ChipGroup / BarChart / Button / Field / CustomSignalInput。
+- 1a 桌機四分頁：今天（四種狀態）、模式、賭注、腳本，含匯出 Markdown 與跨分頁串接。
+- 1b 手機逐題流程（六步）與 <768px 的響應式切換。
+- PWA：manifest、service worker、Google Fonts runtime cache、自產圖示。
+- 20 個單元測試（selectors / persist / markdown 匯出）。
+- 推上 GitHub（public），README 改為中英雙語並加上隱私說明。
+
+**決策與備註**
+
+- **技術棧**選 Vite 而非 Astro/Next：整個 app 都是 client 互動，SSR 幫不上忙。
+- **字級收斂成語意 class**：設計稿有大量 13.5px／行高 1.95／letter-spacing .14em 這種值，散在 utility 裡會失控，全部收進 `type.css` 的三層制度。
+- **深淺色用 `light-dark()`**：兩組值寫在同一處，手動覆寫只改 `:root[data-theme]` 的 `color-scheme`，不換整組變數。
+- **`entries` 是唯一真實來源**：對象排行、條狀圖、趨勢句、賭注戰績全部用算的，不另存。
+- **外觀切換是自己加的**：規格要求產品要能手動覆寫深淺色，但設計稿裡沒有這個控制項（畫布右上角那組是設計工具，不是產品 UI）。做成與「匯出 Markdown」同級的純文字按鈕。
+- **手機上四個分頁共用同一個 shell**：規格只說 <768px 用逐題流程，沒說模式／賭注／腳本怎麼進去。若不共用，那三個分頁在手機上完全沒有入口。
+- **隱私措辭不含糊**：字體目前仍從 Google Fonts CDN 抓，是唯一的對外請求，README 據實寫出並列為待辦，沒有寫成「零請求」。
+- **設計 handoff 已移出版控**（`.gitignore`），檔案留在本機 `design_handoff_place/`。內容仍在第一個 commit 的歷史裡，未從歷史移除。
+- **英文名定為 Place**；程式碼裡的 `PRODUCT_NAME` 維持「未寄」，那是 UI 語言不是專案名。
+
+**下一輪待辦**
+
+- 1c 回顧工作台（≥1200px 三欄：時間軸／詳情／模式）。
+- 字體子集自打包，拿掉 Google Fonts CDN 相依。
