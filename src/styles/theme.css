@@ -1,0 +1,71 @@
+/* Design tokens — handoff README 第 7 節。
+ *
+ * 深色模式是「同色相降明度」，不是反相。兩組值用 light-dark() 寫在同一處，
+ * 讓 prefers-color-scheme 與手動覆寫共用同一份定義：
+ *   - 未覆寫時       :root 的 color-scheme: light dark  → 跟隨系統
+ *   - 手動選淺／深時  :root[data-theme] 改 color-scheme → 只換變數，不改結構
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* 底層 */
+  --canvas: light-dark(#efeee9, #121411);
+  --paper: light-dark(#e3e2da, #1b1e19);
+  --rule: light-dark(#c6c5bb, #343830);
+  --rule-soft: light-dark(rgba(198, 197, 187, 0.7), rgba(255, 255, 255, 0.09));
+
+  /* 文字 */
+  --ink: light-dark(#1e211c, #e3e2da);
+  --on-ink: light-dark(#e3e2da, #15170f);
+  --muted: light-dark(#6e7168, #8e9187);
+  --dim: light-dark(#a5a79e, #5c5f57);
+
+  /* 語意色。--mine ＝ 使用者自己的話；--accent ＝ 系統動作與「還好」。
+   * 兩者都不可用於大面積背景。 */
+  --mine: light-dark(#7a5c6e, #c7a2b6);
+  --accent: light-dark(#1f5d57, #63b6ab);
+  --accent-hi: light-dark(#2e7b73, #84d0c5);
+  --on-accent: light-dark(#ffffff, #15170f);
+
+  /* 淡底 */
+  --wash: light-dark(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.045));
+  --wash-2: light-dark(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.025));
+  --wash-3: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.06));
+}
+
+:root[data-theme='light'] {
+  color-scheme: only light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: only dark;
+}
+
+/* 讓 Tailwind 的 bg-* / text-* / border-* 直接吃上面的 token。 */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-ink: var(--ink);
+  --color-on-ink: var(--on-ink);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-mine: var(--mine);
+  --color-accent: var(--accent);
+  --color-accent-hi: var(--accent-hi);
+  --color-on-accent: var(--on-accent);
+  --color-wash: var(--wash);
+  --color-wash-2: var(--wash-2);
+  --color-wash-3: var(--wash-3);
+
+  --font-serif: 'Noto Serif TC', serif;
+  --font-sans: 'Noto Sans TC', system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  /* 圓角只有三種：輸入框／按鈕／卡片 2px、chip 與進度點 999px、長條圖 1px。
+   * 刻意接近直角，像紙上的框線。 */
+  --radius-sharp: 2px;
+  --radius-bar: 1px;
+}

@@ -1,0 +1,143 @@
+/* 三層字體制度 — handoff README 第 7.2 節。
+ *
+ * 層與層之間不留曖昧地帶，所以字級不是自由值：全站只用底下這些 class，
+ * 不要在 JSX 裡寫 text-[13.5px]/[1.95] 這種東西。
+ *
+ *   引句層 .t-quote-* / .t-btn-* / .t-input-*  Noto Serif TC — 使用者的話、標題、問句
+ *   機器層 .t-mono-*                          ui-monospace   — 日期、眉標、次數、狀態
+ *   介面層 .t-ui-* / .t-label / .t-chip       Noto Sans TC   — 按鈕、欄位標籤、說明文
+ */
+
+@layer components {
+  /* ── 引句層 ─────────────────────────────────────────── */
+  /* 提問畫面上方的裝飾引號「　」 */
+  .t-ornament {
+    font: 400 64px/1 var(--font-serif);
+    letter-spacing: 0.08em;
+  }
+  .t-quote-34 {
+    font: 400 34px/1.5 var(--font-serif);
+  }
+  .t-quote-30 {
+    font: 400 30px/1.5 var(--font-serif);
+  }
+  .t-quote-27 {
+    font: 400 27px/1.55 var(--font-serif);
+  }
+  .t-quote-26 {
+    font: 400 26px/1.7 var(--font-serif);
+  }
+  .t-quote-20 {
+    font: 400 20px/1.75 var(--font-serif);
+  }
+  .t-quote-19 {
+    font: 400 19px/1.75 var(--font-serif);
+  }
+  .t-quote-18 {
+    font: 400 18px/1.8 var(--font-serif);
+  }
+  .t-quote-17 {
+    font: 400 17px/1.5 var(--font-serif);
+  }
+  .t-quote-16 {
+    font: 400 16px/1.75 var(--font-serif);
+  }
+  .t-quote-15 {
+    font: 400 15px/1.6 var(--font-serif);
+  }
+
+  /* 主按鈕：明體但行高收緊，並加 letter-spacing */
+  .t-btn-18 {
+    font: 400 18px/1.4 var(--font-serif);
+    letter-spacing: 0.04em;
+  }
+  .t-btn-17 {
+    font: 400 17px/1.4 var(--font-serif);
+    letter-spacing: 0.04em;
+  }
+
+  /* 明體輸入框：只有「那句話」用明體，其餘輸入框是介面層 */
+  .t-input-serif {
+    font: 400 16px/1.8 var(--font-serif);
+  }
+  .t-input-serif-17 {
+    font: 400 17px/1.85 var(--font-serif);
+  }
+
+  .t-btn-16 {
+    font: 400 16px/1.4 var(--font-serif);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── 機器層 ─────────────────────────────────────────── */
+  /* 眉標用 .14em，日期／meta 這類資料用 .1em */
+  .t-mono-11 {
+    font: 400 11px/1.6 var(--font-mono);
+    letter-spacing: 0.14em;
+  }
+  .t-mono-11-data {
+    font: 400 11px/1.7 var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+  .t-mono-105 {
+    font: 400 10.5px/1.6 var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+  .t-mono-105-tight {
+    font: 400 10.5px/1.9 var(--font-mono);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── 介面層 ─────────────────────────────────────────── */
+  .t-ui-15 {
+    font: 400 15px/1.6 var(--font-sans);
+  }
+  .t-ui-15-loose {
+    font: 400 15px/1.9 var(--font-sans);
+  }
+  .t-ui-14 {
+    font: 400 14px/1.95 var(--font-sans);
+  }
+  /* 摘要列的值 */
+  .t-ui-14-row {
+    font: 400 14px/1.7 var(--font-sans);
+  }
+  /* 次按鈕 */
+  .t-ui-14-btn {
+    font: 400 14px/1.4 var(--font-sans);
+  }
+  .t-ui-135 {
+    font: 400 13.5px/1.95 var(--font-sans);
+  }
+  .t-ui-13 {
+    font: 400 13px/1.6 var(--font-sans);
+  }
+  /* 1b 每一步下方的提示 */
+  .t-ui-13-hint {
+    font: 400 13px/1.9 var(--font-sans);
+  }
+  .t-ui-125 {
+    font: 400 12.5px/1.85 var(--font-sans);
+  }
+  .t-ui-12 {
+    font: 400 12px/1.5 var(--font-sans);
+  }
+
+  /* 欄位標籤與 chip 有固定的字距／行高，獨立成 class 免得抄漏 */
+  .t-label {
+    font: 400 12px/1.5 var(--font-sans);
+    letter-spacing: 0.04em;
+  }
+  /* 賭注卡的編號欄位標籤、「後來呢？」 */
+  .t-label-125 {
+    font: 400 12.5px/1.5 var(--font-sans);
+  }
+  .t-chip {
+    font: 400 13.5px/1.4 var(--font-sans);
+  }
+
+  /* 長段落 */
+  .t-pretty {
+    text-wrap: pretty;
+  }
+}
