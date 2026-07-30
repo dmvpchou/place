@@ -1,6 +1,6 @@
-# 未寄 Weiji
+# 未寄 · Place
 
-**讓心情有地方放。**
+**讓心情有地方放。** A place to put how you feel.
 
 [繁體中文](#繁體中文) · [English](#english)
 
@@ -13,6 +13,19 @@
 每天問一句「今天，有話沒說出口嗎？」，把沒說出口的那句話、對象、場合、身體反應放下來。累積之後，看見自己對誰特別說不出口，並用「賭注」與「腳本」練習下一次真的開口。
 
 單機、本機儲存、不需要帳號、可離線。所有內容只有你看得到。
+
+### 只有你看得到
+
+這不是一句行銷詞，是這個產品的實作方式。
+
+- **沒有帳號、沒有伺服器、沒有雲端同步。** 沒有地方可以登入，因為沒有東西在別的地方。
+- **沒有分析、沒有追蹤、沒有遙測。** 專案裡沒有任何一行統計或回報的程式碼。
+- **沒有任何使用者資料離開這台裝置。** 你寫的每一句話、每一個對象、每一次賭注，都只存在瀏覽器的 localStorage 裡。想帶走就用「匯出 Markdown」，那是複製到你自己的剪貼簿，不經過任何人。
+- **連空白也是私密的。** 哪幾天你沒寫、哪幾天寫了「今天還好」，同樣只有你知道。留白是資訊，那份資訊也是你的。
+
+唯一會對外發出的請求是 Google Fonts CDN 的字體檔（首次載入後由 service worker 快取，之後離線可用）。那個請求不包含你寫的任何內容，但它確實會讓 Google 看到你的 IP——把字體子集自打包、拿掉這個相依，列在下面的待辦裡。
+
+日後若真的做雲端同步，資料必須先加密才能離開裝置。
 
 ### 為什麼
 
@@ -76,17 +89,30 @@ src/
 ### 尚未實作
 
 - 寬螢幕（≥1200px）的三欄回顧工作台：時間軸／詳情／模式同時在眼前。
-- 字體子集自打包。目前用 Google Fonts CDN，由 service worker 快取讓離線可用。
+- 字體子集自打包，拿掉對 Google Fonts CDN 的相依，讓對外請求歸零。
 
 ---
 
 ## English
 
-> This is not a tool for recording feelings. It is a tool for putting them **back where they belong**.
+> Place is not a tool for recording feelings. It is a tool for putting them **back where they belong**.
 
 Once a day it asks one question — "Anything you didn't say out loud today?" — and lets you put down the sentence you swallowed, who it was for, what the situation was, and what your body did. Over time you start to see who you specifically can't speak up to, and two practice tools ("Bets" and "Scripts") help you actually say it next time.
 
 Local-first, stored on your device, no account, works offline. Nobody else can see any of it.
+
+### Nobody else can see any of it
+
+That isn't a marketing line. It's how the thing is built.
+
+- **No account, no server, no cloud sync.** There is nowhere to log in, because nothing is anywhere else.
+- **No analytics, no tracking, no telemetry.** There is not a single line of reporting code in this project.
+- **No user data ever leaves your device.** Every sentence, every name, every bet lives in your browser's localStorage. "Export Markdown" copies it to your own clipboard — it passes through no one.
+- **The blanks are private too.** Which days you skipped, which days you answered "today was fine" — that's yours as well. A blank is information, and that information belongs to you.
+
+The one outbound request is for font files from the Google Fonts CDN (cached by the service worker after first load, so offline still works). That request carries none of what you write, but it does expose your IP to Google — bundling font subsets to remove that dependency is on the list below.
+
+If cloud sync is ever built, data must be encrypted before it leaves the device.
 
 ### Why
 
@@ -140,4 +166,4 @@ Two implementation rules worth knowing:
 ### Not built yet
 
 - The three-column review workbench for wide screens (≥1200px): timeline, detail, and patterns side by side.
-- Self-hosted font subsets. Currently Google Fonts via CDN, cached by the service worker so offline still works.
+- Self-hosted font subsets, removing the Google Fonts CDN dependency so outbound requests drop to zero.
