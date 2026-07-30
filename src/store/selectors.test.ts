@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import * as copy from '../copy'
 import type { Bet, Entry } from '../types'
-import { barSeries, betRecord, trendSentence, whoRanking } from './selectors'
+import {
+  barSeries,
+  betRecord,
+  recentEntries,
+  sameWhoBefore,
+  trendSentence,
+  whoRanking,
+} from './selectors'
 
 const entry = (over: Partial<Entry> & { date: string }): Entry => ({
   had: true,
@@ -60,6 +67,48 @@ describe('barSeries', () => {
     const bars = barSeries([], 14, '2026-07-31')
     expect(bars).toHaveLength(14)
     expect(bars.every((b) => b.kind === 'none' && b.height === 3)).toBe(true)
+  })
+})
+
+describe('recentEntries', () => {
+  it('只取最近三週，新的在上面', () => {
+    const entries = [
+      entry({ date: '2026-07-05' }), // 27 天前，超出範圍
+      entry({ date: '2026-07-11' }), // 21 天前，剛好是邊界內的第一天
+      entry({ date: '2026-07-20' }),
+      entry({ date: '2026-07-31' }),
+    ]
+    expect(recentEntries(entries, 21, '2026-07-31').map((e) => e.date)).toEqual([
+      '2026-07-31',
+      '2026-07-20',
+      '2026-07-11',
+    ])
+  })
+})
+
+describe('sameWhoBefore', () => {
+  const client = (date: string, line: string) =>
+    entry({ date, who: '客戶 A', line })
+
+  it('只回同一個對象、且在這天之前的，新的在上面', () => {
+    const target = client('2026-07-30', '這超出原本範圍。')
+    const entries = [
+      client('2026-07-23', '請照順序來。'),
+      client('2026-07-27', '上次改的部分還沒付款。'),
+      client('2026-08-02', '之後才發生的不算'),
+      entry({ date: '2026-07-25', who: '媽媽', line: '我現在不想談。' }),
+      target,
+    ]
+    expect(sameWhoBefore(entries, target).map((e) => e.line)).toEqual([
+      '上次改的部分還沒付款。',
+      '請照順序來。',
+    ])
+  })
+
+  it('沒寫對象或沒寫那句話的不算', () => {
+    const target = client('2026-07-30', '這超出原本範圍。')
+    expect(sameWhoBefore([client('2026-07-20', '   '), target], target)).toEqual([])
+    expect(sameWhoBefore([target], entry({ date: '2026-07-30' }))).toEqual([])
   })
 })
 
