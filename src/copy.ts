@@ -66,6 +66,17 @@ export const pattern = {
   trendEmpty: '這裡還很空。先記個兩三週，名單自己會浮出來。',
 }
 
+/** 1c 回顧工作台。寬螢幕時「模式」分頁的進階視圖。 */
+export const workbench = {
+  count: (n: number) => `${n} 筆 · 最近三週`,
+  countEmpty: '還沒有記錄',
+  okLine: '今天還好',
+  facts: { who: '對誰', occasion: '場合', signals: '身體', replay: '重播' },
+  related: '同一個對象，之前發生過',
+  noEntryTitle: '這天沒有卡住的話。',
+  noEntryNote: '空白也是資料。連著幾天空白，通常代表那陣子外面比較安靜。',
+}
+
 export const bets = {
   eyebrow: '賭注',
   title: '開口之前，\n先猜猜對方會怎樣。',

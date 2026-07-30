@@ -1,6 +1,6 @@
 import { BASE_SIGNALS } from '../constants'
 import * as copy from '../copy'
-import { lastNDays, todayISO } from '../lib/date'
+import { lastNDays, shiftDays, todayISO } from '../lib/date'
 import type { Bet, Entry } from '../types'
 
 /**
@@ -73,6 +73,32 @@ export function allSignals(customSignals: string[]): string[] {
 
 export function entryForDate(entries: Entry[], date: string): Entry | undefined {
   return entries.find((e) => e.date === date)
+}
+
+/** 工作台左欄的時間軸：最近三週，新的在上面。 */
+export function recentEntries(
+  entries: Entry[],
+  days = 21,
+  endISO: string = todayISO(),
+): Entry[] {
+  const from = shiftDays(endISO, -(days - 1))
+  return entries
+    .filter((e) => e.date >= from && e.date <= endISO)
+    .sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/**
+ * 同一個對象，在這一天之前發生過的。
+ * 這是工作台真正的用處——一個名字底下累積的那幾句話擺在一起，形狀才看得出來。
+ */
+export function sameWhoBefore(entries: Entry[], entry: Entry): Entry[] {
+  const who = entry.who?.trim()
+  if (!who) return []
+  return entries
+    .filter(
+      (e) => e.had && e.date < entry.date && e.who?.trim() === who && e.line?.trim(),
+    )
+    .sort((a, b) => b.date.localeCompare(a.date))
 }
 
 export function waitingBets(bets: Bet[]): Bet[] {

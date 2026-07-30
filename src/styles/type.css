@@ -33,6 +33,10 @@
   .t-quote-19 {
     font: 400 19px/1.75 var(--font-serif);
   }
+  /* 工作台右欄標題，兩行，行高比腳本句子收一點 */
+  .t-quote-19-tight {
+    font: 400 19px/1.6 var(--font-serif);
+  }
   .t-quote-18 {
     font: 400 18px/1.8 var(--font-serif);
   }
@@ -40,7 +44,7 @@
     font: 400 17px/1.5 var(--font-serif);
   }
   .t-quote-16 {
-    font: 400 16px/1.75 var(--font-serif);
+    font: 400 16px/1.8 var(--font-serif);
   }
   .t-quote-15 {
     font: 400 15px/1.6 var(--font-serif);
@@ -87,6 +91,15 @@
     font: 400 10.5px/1.9 var(--font-mono);
     letter-spacing: 0.08em;
   }
+  /* 工作台詳情的事實標籤，字距同眉標 */
+  .t-mono-105-eyebrow {
+    font: 400 10.5px/1.6 var(--font-mono);
+    letter-spacing: 0.14em;
+  }
+  /* 工作台「之前發生過」的日期：沒有字距 */
+  .t-mono-11-plain {
+    font: 400 11px/1.9 var(--font-mono);
+  }
 
   /* ── 介面層 ─────────────────────────────────────────── */
   .t-ui-15 {
@@ -105,6 +118,10 @@
   /* 次按鈕 */
   .t-ui-14-btn {
     font: 400 14px/1.4 var(--font-sans);
+  }
+  /* 工作台右欄的對象名，行高影響列高，不能用 1.95 */
+  .t-ui-14-list {
+    font: 400 14px/1.5 var(--font-sans);
   }
   .t-ui-135 {
     font: 400 13.5px/1.95 var(--font-sans);
