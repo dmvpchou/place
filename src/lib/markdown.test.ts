@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Bet, Entry } from '../types'
+import { bets as betsCopy } from '../copy'
 import { exportMarkdown } from './markdown'
 
 const entries: Entry[] = [
@@ -37,8 +38,8 @@ describe('exportMarkdown', () => {
     expect(md).toContain('— · —')
   })
 
-  it('沒有賭注時不長出賭注段落', () => {
-    expect(exportMarkdown(entries)).not.toContain('## 賭注')
+  it('沒有賭注時不長出那一段', () => {
+    expect(exportMarkdown(entries)).not.toContain(`## ${betsCopy.eyebrow}`)
   })
 
   it('有賭注時附上結果與實際發生的事', () => {
@@ -54,7 +55,7 @@ describe('exportMarkdown', () => {
       },
     ]
     const md = exportMarkdown(entries, bets)
-    expect(md).toContain('## 賭注')
+    expect(md).toContain(`## ${betsCopy.eyebrow}`)
     expect(md).toContain('結果：比我想的溫和')
     expect(md).toContain('實際上：對方直接說好，還多給了三天。')
   })

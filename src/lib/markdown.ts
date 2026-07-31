@@ -1,7 +1,6 @@
 import { PRODUCT_NAME } from '../constants'
-import { EMPTY } from '../copy'
 import type { Bet, Entry } from '../types'
-import { outcomeLabels } from '../copy'
+import { bets as betsCopy, EMPTY, outcomeLabels } from '../copy'
 
 /**
  * 匯出成可貼進 Obsidian 的 Markdown。純文字、無評分、無統計摘要——
@@ -41,7 +40,7 @@ export function exportMarkdown(entries: Entry[], bets: Bet[] = []): string {
   for (const e of sorted) out.push(entryToMarkdown(e), '')
 
   if (bets.length > 0) {
-    out.push('---', '', '## 賭注', '')
+    out.push('---', '', `## ${betsCopy.eyebrow}`, '')
     const sortedBets = [...bets].sort((a, b) => b.date.localeCompare(a.date))
     for (const b of sortedBets) out.push(betToMarkdown(b), '')
   }

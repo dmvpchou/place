@@ -77,8 +77,22 @@ export const workbench = {
   noEntryNote: '空白也是資料。連著幾天空白，通常代表那陣子外面比較安靜。',
 }
 
+/**
+ * 分頁名。「what if」與「遇到」取代原本的「賭注」「腳本」——
+ * 它們比較貼近那兩個分頁自己在說的話（「如果我說了，會怎樣？」、
+ * 每一組腳本的組頭就是「遇到 · 場合」），也讓窄螢幕的橫列排得下。
+ */
+export const nav = {
+  today: '今天',
+  pattern: '模式',
+  bets: 'what if',
+  scripts: '遇到',
+  export: '匯出',
+  exported: (n: number) => `已複製 ${n} 天記錄\n可貼進 Obsidian`,
+}
+
 export const bets = {
-  eyebrow: '賭注',
+  eyebrow: nav.bets,
   title: '開口之前，\n先猜猜對方會怎樣。',
   intro:
     '你沒說出口，通常是因為心裡先演了一場最壞的。\n把那場戲寫下來，事後回來對答案——這是唯一能拆掉它的方法。',
@@ -115,7 +129,7 @@ export const outcomeLabels: Record<BetOutcome, string> = {
 }
 
 export const scripts = {
-  eyebrow: '腳本',
+  eyebrow: nav.scripts,
   title: '先寫好，\n就不必靠當下的勇氣。',
   intro: '照場合分類。下次遇到，翻到那一段，照著唸就好。',
   groupHead: (situation: string) => `遇到 · ${situation}`,
@@ -138,15 +152,8 @@ export const appearance = {
   system: '跟隨系統',
   light: '淺',
   dark: '深',
-}
-
-export const nav = {
-  today: '今天',
-  pattern: '模式',
-  bets: '賭注',
-  scripts: '腳本',
-  export: '匯出 Markdown',
-  exported: (n: number) => `已複製 ${n} 天記錄\n可貼進 Obsidian`,
+  /** 設計裡沒有任何圖檔，「＋」「→」都是文字字元，這裡沿用同一套做法。 */
+  icon: { system: '◐', light: '○', dark: '●' },
 }
 
 export const wizard = {
