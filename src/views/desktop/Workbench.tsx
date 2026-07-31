@@ -16,15 +16,32 @@ import { useAppState } from '../../store/useAppStore'
 import type { Entry } from '../../types'
 
 /**
- * 1c 回顧工作台。≥1200px 時「模式」分頁的進階視圖：
- * 右欄就是原本的模式，左欄與中欄多給了一件 1a 做不到的事——回頭看過去那幾天。
+ * 1c 回顧工作台。
+ *
+ * scope='recent'：≥1200px 時「模式」分頁的進階視圖，時間軸與條狀圖同樣是最近 14 天。
+ * scope='all'   ：從「⋯ → 完整紀錄」進來，時間軸不設上限。
+ *
+ * 右欄就是原本的模式，左欄與中欄多給了一件四分頁做不到的事——回頭看過去那幾天。
+ * 窄一點的螢幕放不下三欄：<1200px 收掉右欄（模式本來就有自己的分頁），
+ * <900px 一次只顯示列表或詳情。
  */
-export function Workbench() {
+export function Workbench({
+  scope = 'recent',
+  narrow = false,
+}: {
+  scope?: 'recent' | 'all'
+  narrow?: boolean
+}) {
   const { entries } = useAppState()
   const today = todayISO()
-  const timeline = recentEntries(entries, 21, today)
+  const timeline =
+    scope === 'all'
+      ? [...entries].sort((a, b) => b.date.localeCompare(a.date))
+      : recentEntries(entries, BAR_DAYS, today)
 
   const [selected, setSelected] = useState<string | null>(null)
+  // 窄螢幕一次只看得到一欄：預設先看列表，點了某一天才換成詳情。
+  const [showDetail, setShowDetail] = useState(false)
   // 沒選過就看最新的那一筆。
   const selectedDate = selected ?? timeline[0]?.date ?? null
   const entry = selectedDate ? entryForDate(entries, selectedDate) : undefined
@@ -32,14 +49,20 @@ export function Workbench() {
   return (
     <div className="anim-enter flex min-h-[640px] flex-1">
       {/* 左欄 · 時間軸 */}
-      <div className="flex w-[300px] flex-none flex-col border-r border-rule">
+      <div
+        className={`flex w-[300px] flex-none flex-col border-r border-rule max-[899px]:w-full max-[899px]:border-r-0 ${
+          narrow && showDetail ? 'hidden' : ''
+        }`}
+      >
         {/* 設計稿的 1c 是完整的 app 外框，表頭掛著產品名；這裡它是「模式」分頁的
             內容，左邊兩欄外就是側欄的品牌了，再掛一次會像 bug。只留筆數。 */}
         <div className="border-b border-rule px-[24px] pt-[26px] pb-[18px]">
           <div className="t-mono-11 text-muted">
-            {timeline.length > 0
-              ? copy.workbench.count(timeline.length)
-              : copy.workbench.countEmpty}
+            {timeline.length === 0
+              ? copy.workbench.countEmpty
+              : scope === 'all'
+                ? copy.workbench.countAll(timeline.length)
+                : copy.workbench.count(timeline.length)}
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-auto">
@@ -48,14 +71,30 @@ export function Workbench() {
               key={e.date}
               entry={e}
               selected={e.date === selectedDate}
-              onSelect={() => setSelected(e.date)}
+              onSelect={() => {
+                setSelected(e.date)
+                setShowDetail(true)
+              }}
             />
           ))}
         </div>
       </div>
 
       {/* 中欄 · 詳情 */}
-      <div className="min-w-0 flex-1 px-[40px] py-[32px]">
+      <div
+        className={`min-w-0 flex-1 px-[40px] py-[32px] max-[899px]:px-[26px] ${
+          narrow && !showDetail ? 'hidden' : ''
+        }`}
+      >
+        {narrow && (
+          <button
+            type="button"
+            onClick={() => setShowDetail(false)}
+            className="t-ui-12 mb-[14px] cursor-pointer border-0 bg-transparent p-0 text-accent hover:text-accent-hi"
+          >
+            {copy.workbench.back}
+          </button>
+        )}
         {entry && (
           <>
             <div className="t-mono-11 text-muted">{entry.date}</div>
@@ -65,7 +104,8 @@ export function Workbench() {
       </div>
 
       {/* 右欄 · 模式 */}
-      <div className="w-[250px] flex-none border-l border-rule bg-wash-2 px-[24px] py-[28px]">
+      {/* 右欄在 <1200px 收起來：模式本來就有自己的分頁，不必在這裡再擠一次 */}
+      <div className="w-[250px] flex-none border-l border-rule bg-wash-2 px-[24px] py-[28px] max-[1199px]:hidden">
         <div className="t-mono-11 text-muted">{copy.pattern.eyebrow}</div>
         <div className="t-quote-19-tight mt-[12px] mb-[20px] text-ink">
           <Lines text={copy.pattern.title} />
