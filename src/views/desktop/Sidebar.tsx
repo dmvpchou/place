@@ -3,6 +3,7 @@ import { PRODUCT_NAME } from '../../constants'
 import * as copy from '../../copy'
 import { Lines } from '../../components/Lines'
 import { ThemeToggle } from '../../components/ThemeToggle'
+import { BackupPanel } from './BackupPanel'
 import { copyText } from '../../lib/clipboard'
 import { todayISO } from '../../lib/date'
 import { exportMarkdown } from '../../lib/markdown'
@@ -82,6 +83,8 @@ export function Sidebar({
       >
         {copy.nav.export}
       </button>
+
+      <BackupPanel className="max-[899px]:py-0" resetKey={active} />
 
       <ThemeToggle className="max-[899px]:py-0" />
 

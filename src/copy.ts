@@ -92,6 +92,26 @@ export const nav = {
   exported: (n: number) => `已複製 ${n} 天記錄\n可貼進 Obsidian`,
 }
 
+/**
+ * 備份與還原。沒有帳號也沒有同步，所以「你自己留一份」是唯一的安全網。
+ * 語氣照舊：不催、不嚇人，還原前把要蓋掉什麼講清楚就好。
+ */
+export const backup = {
+  action: '備份',
+  save: '存成檔案',
+  why: '這裡的東西只存在這台裝置上。留一份，換手機或清掉瀏覽器資料時才回得來。',
+  saved: (name: string) => `已存成 ${name}`,
+  hint: '放在你自己找得到的地方就好。',
+  restore: '從備份還原',
+  found: (entries: number, bets: number) =>
+    `這份備份有 ${entries} 天記錄、${bets} 個賭注。`,
+  willReplace: '換上去之後，現在這台裝置上的內容會被它取代。',
+  confirm: '換成這一份',
+  cancel: '算了',
+  unreadable: '這個檔案讀不出來，換一個試試。',
+  restored: '換好了。',
+}
+
 export const bets = {
   eyebrow: nav.bets,
   title: '開口之前，\n先猜猜對方會怎樣。',
