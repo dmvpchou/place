@@ -6,11 +6,15 @@ import {
   parseBackup,
   type ParsedBackup,
 } from '../../lib/backup'
+import { copyText } from '../../lib/clipboard'
+import { exportMarkdown } from '../../lib/markdown'
 import { replaceAll, useAppState } from '../../store/useAppStore'
 
 type Stage =
   | { kind: 'closed' }
   | { kind: 'menu' }
+  | { kind: 'exported'; count: number }
+  | { kind: 'backup' }
   | { kind: 'saved'; fileName: string }
   | { kind: 'picked'; parsed: ParsedBackup }
   | { kind: 'unreadable' }
@@ -18,27 +22,34 @@ type Stage =
 
 const linkClass =
   't-ui-12 cursor-pointer border-0 bg-transparent p-0 text-left text-accent hover:text-accent-hi'
+const quietClass =
+  't-ui-12 cursor-pointer border-0 bg-transparent p-0 text-left text-muted hover:opacity-85'
 
 /**
- * 側欄底部的「備份」。點開後「存成檔案」與「從備份還原」並列——
- * 還原不能藏在存檔之後：真正需要還原的人，資料通常剛好已經沒了。
- *
- * 還原是全站唯一會蓋掉既有記錄的動作，所以一定先讓使用者看到
- * 「這份備份有幾天記錄」再問一次。
+ * 側欄底部的「⋯」。完整紀錄、匯出、備份都收在這裡——
+ * 它們都是偶爾才用一次的東西，不值得各佔一個常駐位置，
+ * 尤其窄螢幕收合成頂部橫列時，能省一格是一格。
  */
-export function BackupPanel({
+export function MoreMenu({
   className = '',
   resetKey,
+  onOpenRecords,
 }: {
   className?: string
-  /** 這個值一變就收起面板（切換分頁時），與「匯出」的行為一致 */
+  /** 這個值一變就收起面板（切換分頁時） */
   resetKey?: string
+  onOpenRecords: () => void
 }) {
   const state = useAppState()
   const [stage, setStage] = useState<Stage>({ kind: 'closed' })
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => setStage({ kind: 'closed' }), [resetKey])
+
+  async function exportMd() {
+    await copyText(exportMarkdown(state.entries, state.bets))
+    setStage({ kind: 'exported', count: state.entries.length })
+  }
 
   function save() {
     const fileName = backupFileName()
@@ -60,9 +71,10 @@ export function BackupPanel({
         type="button"
         onClick={() => setStage(open ? { kind: 'closed' } : { kind: 'menu' })}
         aria-expanded={open}
-        className={`t-ui-12 cursor-pointer border-0 bg-transparent py-[6px] text-left text-muted transition-opacity hover:opacity-85 ${className}`}
+        aria-label={copy.more.label}
+        className={`t-ui-15 cursor-pointer border-0 bg-transparent py-[6px] text-left text-muted transition-opacity hover:opacity-85 ${className}`}
       >
-        {copy.backup.action}
+        {copy.more.action}
       </button>
 
       <input
@@ -79,6 +91,30 @@ export function BackupPanel({
       {open && (
         <div className="anim-enter mt-[8px] rounded-[2px] border border-rule bg-wash-3 px-[12px] py-[11px] max-[899px]:w-full">
           {stage.kind === 'menu' && (
+            <div className="flex flex-col items-start gap-[8px]">
+              <button type="button" onClick={onOpenRecords} className={linkClass}>
+                {copy.more.records}
+              </button>
+              <button type="button" onClick={() => void exportMd()} className={linkClass}>
+                {copy.nav.export}
+              </button>
+              <button
+                type="button"
+                onClick={() => setStage({ kind: 'backup' })}
+                className={linkClass}
+              >
+                {copy.backup.action}
+              </button>
+            </div>
+          )}
+
+          {stage.kind === 'exported' && (
+            <div className="t-mono-11 leading-[1.7] text-muted">
+              {copy.nav.exported(stage.count)}
+            </div>
+          )}
+
+          {stage.kind === 'backup' && (
             <>
               <p className="t-ui-12 mt-0 mb-[10px] leading-[1.7] text-dim">
                 {copy.backup.why}
@@ -133,7 +169,7 @@ export function BackupPanel({
                 <button
                   type="button"
                   onClick={() => setStage({ kind: 'closed' })}
-                  className="t-ui-12 cursor-pointer border-0 bg-transparent p-0 text-muted hover:opacity-85"
+                  className={quietClass}
                 >
                   {copy.backup.cancel}
                 </button>
