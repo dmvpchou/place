@@ -70,6 +70,30 @@
 
 ---
 
+## 2026-07-31 · 第三輪：字體自己託管，對外請求歸零
+
+**完成事項**
+
+- `scripts/fetch-fonts.mjs`：向 Google css2 端點要 CSS，把 213 個帶 `unicode-range` 的 woff2 分片下載到 `public/fonts/`，並產生 `public/fonts.css`（本機路徑）。共 5.6 MB。
+- `index.html` 拿掉 Google Fonts 的 preconnect 與 stylesheet，改指向自己的 `/fonts.css`。
+- service worker：字體不進 precache，改用 CacheFirst 的 runtime cache。
+- 補上 `public/fonts/OFL.txt`（SIL Open Font License 1.1）。
+- README 的隱私段落改成「沒有任何對外請求」，並新增「字體」一節說明分片做法與授權。
+- 實測：`dist/` 全域搜尋沒有任何 googleapis／gstatic；preview 載入 24 筆請求全是 same-origin；213 片只抓了 15 片；把 preview server 砍掉後重整仍正常顯示中文。
+
+**決策與備註**
+
+- **只抓 400 一個字重。** `type.css` 的 37 個 class 全是 400，設計稿雖然載了 400;500，但實作沒有一處用到 500。少一半體積。
+- **不自己跑 pyftsubset，直接用 Google 已經切好的分片。** 切分策略（哪些字碼一組）是 Google 長期調過的，自己重切只會更差；而且不必引入 Python 字體工具鏈。腳本只做「下載 + 改寫路徑」。
+- **字體 CSS 獨立成 `public/fonts.css`，不進 app 的 CSS bundle。** 213 條 `@font-face` 有 227KB，混進 bundle 會讓 app CSS 從 17KB 變成 216KB，而且每次改樣式使用者都要重抓一次。拆開後 app CSS 回到 16.8KB。
+- **字體不 precache。** 5.6MB 全部 precache 等於要使用者第一次開就下載一整套中文字，完全違背分片的用意。改用 runtime cache：抓過哪片就留哪片。
+
+**下一輪待辦**
+
+- 暫無。三個階段的畫面與隱私目標都到位了。
+
+---
+
 ## 2026-07-31 · 第二輪：1c 回顧工作台
 
 **完成事項**
@@ -89,7 +113,7 @@
 
 **下一輪待辦**
 
-- 字體子集自打包，拿掉 Google Fonts CDN 相依，讓對外請求歸零。
+- ~~字體子集自打包~~（2026-07-31 第三輪完成）
 
 ---
 
@@ -122,4 +146,4 @@
 **下一輪待辦**
 
 - ~~1c 回顧工作台~~（2026-07-31 第二輪完成）
-- 字體子集自打包，拿掉 Google Fonts CDN 相依。
+- ~~字體子集自打包~~（2026-07-31 第三輪完成）
