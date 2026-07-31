@@ -128,6 +128,14 @@ export function markScriptUsed(situation: string) {
   })
 }
 
+/**
+ * 用一份備份整個換掉現在的資料。這是唯一會蓋掉既有記錄的動作，
+ * 所以畫面上一定要先問過再叫它。
+ */
+export function replaceAll(next: PersistedState) {
+  set(next)
+}
+
 /** null ＝ 跟隨系統。 */
 export function setTheme(next: Theme | null) {
   theme = next
