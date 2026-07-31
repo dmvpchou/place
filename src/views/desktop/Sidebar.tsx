@@ -48,9 +48,11 @@ export function Sidebar({
     <nav
       className="flex w-[200px] flex-none flex-col gap-[3px] border-r border-rule px-[22px] py-[30px] max-[899px]:w-full max-[899px]:flex-row max-[899px]:flex-wrap max-[899px]:items-baseline max-[899px]:gap-x-[20px] max-[899px]:border-r-0 max-[899px]:border-b max-[899px]:py-[20px]"
     >
-      <div className="mb-[26px] max-[899px]:mr-auto max-[899px]:mb-0">
+      {/* 收合時品牌獨占一行：分頁橫列擠在同一行會被推到第二行（iPhone 16 上
+          「遇到」就掉下去了）。日期改成與品牌同一行，不多佔一列高度。 */}
+      <div className="mb-[26px] max-[899px]:mb-[14px] max-[899px]:flex max-[899px]:w-full max-[899px]:items-baseline max-[899px]:gap-[10px]">
         <div className="t-quote-17 tracking-[.02em] text-ink">{PRODUCT_NAME}</div>
-        <div className="t-mono-11 mt-[2px] text-muted">{todayISO()}</div>
+        <div className="t-mono-11 mt-[2px] text-muted max-[899px]:mt-0">{todayISO()}</div>
       </div>
 
       {TABS.map((tab) => {
