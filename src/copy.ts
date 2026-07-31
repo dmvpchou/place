@@ -78,14 +78,15 @@ export const workbench = {
 }
 
 /**
- * 分頁名。「what if」與「遇到」取代原本的「賭注」「腳本」——
+ * 分頁名。「如果」與「遇到」取代原本的「賭注」「腳本」——
  * 它們比較貼近那兩個分頁自己在說的話（「如果我說了，會怎樣？」、
  * 每一組腳本的組頭就是「遇到 · 場合」），也讓窄螢幕的橫列排得下。
+ * 介面其餘全是繁中，不留一個英文分頁名。
  */
 export const nav = {
   today: '今天',
   pattern: '模式',
-  bets: 'what if',
+  bets: '如果',
   scripts: '遇到',
   export: '匯出',
   exported: (n: number) => `已複製 ${n} 天記錄\n可貼進 Obsidian`,
