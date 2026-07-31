@@ -31,7 +31,7 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
       onClick={() => setTheme(ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length])}
       aria-label={label}
       title={label}
-      className={`t-ui-13 cursor-pointer border-0 bg-transparent py-[6px] text-left text-muted transition-opacity hover:opacity-85 ${className}`}
+      className={`t-ui-16 cursor-pointer border-0 bg-transparent py-[6px] text-left text-muted transition-opacity hover:opacity-85 ${className}`}
     >
       {icon}
     </button>

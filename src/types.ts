@@ -44,5 +44,6 @@ export interface ScriptGroup {
 }
 
 export type Theme = 'light' | 'dark'
-export type Tab = 'today' | 'pattern' | 'bets' | 'scripts'
+/** 'records'（完整紀錄）不在分頁列上，是從「⋯」進來的回顧視圖。 */
+export type Tab = 'today' | 'pattern' | 'bets' | 'scripts' | 'records'
 export type TodayScreen = 'ask' | 'form' | 'done' | 'no-done'

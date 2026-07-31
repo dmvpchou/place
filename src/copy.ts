@@ -1,3 +1,4 @@
+import { BAR_DAYS, PRODUCT_NAME } from './constants'
 import type { BetOutcome, Replay } from './types'
 
 /**
@@ -68,8 +69,10 @@ export const pattern = {
 
 /** 1c 回顧工作台。寬螢幕時「模式」分頁的進階視圖。 */
 export const workbench = {
-  count: (n: number) => `${n} 筆 · 最近三週`,
+  count: (n: number) => `${n} 筆 · 最近 ${BAR_DAYS} 天`,
+  countAll: (n: number) => `${n} 筆 · 全部`,
   countEmpty: '還沒有記錄',
+  back: '← 回到列表',
   okLine: '今天還好',
   facts: { who: '對誰', occasion: '場合', signals: '身體', replay: '重播' },
   related: '同一個對象，之前發生過',
@@ -89,8 +92,18 @@ export const nav = {
   bets: '如果',
   scripts: '遇到',
   export: '匯出',
-  exported: (n: number) => `已複製 ${n} 天記錄\n可貼進 Obsidian`,
+  exported: (n: number) => `已複製 ${n} 天記錄`,
 }
+
+/** 側欄底部的「⋯」。不常用、但需要時要找得到的東西都收在這裡。 */
+export const more = {
+  action: '⋯',
+  label: '更多',
+  records: '完整紀錄',
+}
+
+/** 頁尾。 */
+export const footer = `${PRODUCT_NAME} 2026 · 咖啡宇宙的一部份`
 
 /**
  * 備份與還原。沒有帳號也沒有同步，所以「你自己留一份」是唯一的安全網。
