@@ -10,7 +10,7 @@
 
 > 這不是一個記錄情緒的工具，是一個幫情緒**歸位**的工具。
 
-每天問一句「今天，有話沒說出口嗎？」，把沒說出口的那句話、對象、場合、身體反應放下來。累積之後，看見自己對誰特別說不出口，並用「賭注」與「腳本」練習下一次真的開口。
+每天問一句「今天，有話沒說出口嗎？」，把沒說出口的那句話、對象、場合、身體反應放下來。累積之後，看見自己對誰特別說不出口，並用「如果」與「遇到」練習下一次真的開口。
 
 單機、本機儲存、不需要帳號、可離線。所有內容只有你看得到。
 
@@ -20,11 +20,11 @@
 
 - **沒有帳號、沒有伺服器、沒有雲端同步。** 沒有地方可以登入，因為沒有東西在別的地方。
 - **沒有分析、沒有追蹤、沒有遙測。** 專案裡沒有任何一行統計或回報的程式碼。
-- **沒有任何使用者資料離開這台裝置。** 你寫的每一句話、每一個對象、每一次賭注，都只存在瀏覽器的 localStorage 裡。想帶走就用「匯出 Markdown」，那是複製到你自己的剪貼簿，不經過任何人。
+- **沒有任何使用者資料離開這台裝置。** 你寫的每一句話、每一個對象、每一次賭注，都只存在瀏覽器的 localStorage 裡。想帶走就用「⋯ → 匯出」，那是把 Markdown 複製到你自己的剪貼簿，不經過任何人。
 - **連空白也是私密的。** 哪幾天你沒寫、哪幾天寫了「今天還好」，同樣只有你知道。留白是資訊，那份資訊也是你的。
 - **沒有任何對外請求。** 字體自己託管，不經過 Google Fonts CDN；整個 app 從第一次載入開始，只跟自己的網域說話。
 
-代價是：沒有帳號也沒有同步，清掉瀏覽器資料或換一台裝置，東西就沒了。所以側欄有「備份」——存成一個 JSON 檔到你自己的裝置上，需要時再還原回來。那個檔案是未加密的純文字，跟你的記錄一樣私密，放在哪裡由你決定。
+代價是：沒有帳號也沒有同步，清掉瀏覽器資料或換一台裝置，東西就沒了。所以側欄的「⋯ → 備份」可以存成一個 JSON 檔到你自己的裝置上，需要時再還原回來。那個檔案是未加密的純文字，跟你的記錄一樣私密，放在哪裡由你決定。
 
 日後若真的做雲端同步，資料必須先加密才能離開裝置。
 
@@ -46,8 +46,8 @@
 |---|---|---|
 | 今天 | 拿出來 | 記錄今天沒說出口的那句話 |
 | 模式 | 歸位後的觀察 | 看出對誰特別說不出口 |
-| 賭注 | 校正預期 | 把腦裡演的最壞情況寫下來，事後對答案 |
-| 腳本 | 備用 | 整理好的句子，下次直接拿出來用 |
+| 如果 | 校正預期 | 把腦裡演的最壞情況寫下來，事後對答案 |
+| 遇到 | 備用 | 整理好的句子，下次直接拿出來用 |
 
 ### 刻意不做的事
 
@@ -100,7 +100,7 @@ src/
 
 > Place is not a tool for recording feelings. It is a tool for putting them **back where they belong**.
 
-Once a day it asks one question — "Anything you didn't say out loud today?" — and lets you put down the sentence you swallowed, who it was for, what the situation was, and what your body did. Over time you start to see who you specifically can't speak up to, and two practice tools ("Bets" and "Scripts") help you actually say it next time.
+Once a day it asks one question — "Anything you didn't say out loud today?" — and lets you put down the sentence you swallowed, who it was for, what the situation was, and what your body did. Over time you start to see who you specifically can't speak up to, and two practice tools — 如果 ("what if") and 遇到 ("when it comes up") — help you actually say it next time.
 
 Local-first, stored on your device, no account, works offline. Nobody else can see any of it.
 
@@ -110,11 +110,11 @@ That isn't a marketing line. It's how the thing is built.
 
 - **No account, no server, no cloud sync.** There is nowhere to log in, because nothing is anywhere else.
 - **No analytics, no tracking, no telemetry.** There is not a single line of reporting code in this project.
-- **No user data ever leaves your device.** Every sentence, every name, every bet lives in your browser's localStorage. "Export Markdown" copies it to your own clipboard — it passes through no one.
+- **No user data ever leaves your device.** Every sentence, every name, every bet lives in your browser's localStorage. "⋯ → 匯出" copies Markdown to your own clipboard — it passes through no one.
 - **The blanks are private too.** Which days you skipped, which days you answered "today was fine" — that's yours as well. A blank is information, and that information belongs to you.
 - **No outbound requests at all.** Fonts are self-hosted rather than loaded from the Google Fonts CDN; from the first load onward, the app only ever talks to its own domain.
 
-The cost of that: no account and no sync, so clearing browser data or switching devices loses everything. Hence "備份" in the sidebar — it writes a JSON file to your own device, and restores from one later. That file is unencrypted plain text; it is as private as the entries it holds, and where it lives is your call.
+The cost of that: no account and no sync, so clearing browser data or switching devices loses everything. Hence "⋯ → 備份" in the sidebar — it writes a JSON file to your own device, and restores from one later. That file is unencrypted plain text; it is as private as the entries it holds, and where it lives is your call.
 
 If cloud sync is ever built, data must be encrypted before it leaves the device.
 
@@ -136,8 +136,8 @@ Not four features — four stages of the same act of tidying.
 |---|---|---|
 | Today | Take it out | Record the sentence you didn't say |
 | Pattern | Observation | See who you specifically can't speak up to |
-| Bets | Recalibration | Write down the worst case you rehearsed, then check it against reality |
-| Scripts | Spare parts | Sentences prepared in advance, ready to use |
+| 如果 (what if) | Recalibration | Write down the worst case you rehearsed, then check it against reality |
+| 遇到 (when it comes up) | Spare parts | Sentences prepared in advance, ready to use |
 
 ### Deliberately absent
 
