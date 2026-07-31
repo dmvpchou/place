@@ -24,6 +24,8 @@
 - **連空白也是私密的。** 哪幾天你沒寫、哪幾天寫了「今天還好」，同樣只有你知道。留白是資訊，那份資訊也是你的。
 - **沒有任何對外請求。** 字體自己託管，不經過 Google Fonts CDN；整個 app 從第一次載入開始，只跟自己的網域說話。
 
+代價是：沒有帳號也沒有同步，清掉瀏覽器資料或換一台裝置，東西就沒了。所以側欄有「備份」——存成一個 JSON 檔到你自己的裝置上，需要時再還原回來。那個檔案是未加密的純文字，跟你的記錄一樣私密，放在哪裡由你決定。
+
 日後若真的做雲端同步，資料必須先加密才能離開裝置。
 
 ### 為什麼
@@ -111,6 +113,8 @@ That isn't a marketing line. It's how the thing is built.
 - **No user data ever leaves your device.** Every sentence, every name, every bet lives in your browser's localStorage. "Export Markdown" copies it to your own clipboard — it passes through no one.
 - **The blanks are private too.** Which days you skipped, which days you answered "today was fine" — that's yours as well. A blank is information, and that information belongs to you.
 - **No outbound requests at all.** Fonts are self-hosted rather than loaded from the Google Fonts CDN; from the first load onward, the app only ever talks to its own domain.
+
+The cost of that: no account and no sync, so clearing browser data or switching devices loses everything. Hence "備份" in the sidebar — it writes a JSON file to your own device, and restores from one later. That file is unencrypted plain text; it is as private as the entries it holds, and where it lives is your call.
 
 If cloud sync is ever built, data must be encrypted before it leaves the device.
 
