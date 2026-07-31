@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/png" href="/icons/icon-192.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <!-- 自己託管的 Noto Sans/Serif TC，切成 unicode-range 分片，
+         由 scripts/fetch-fonts.mjs 產生。瀏覽器只會抓它需要的那幾片。 -->
+    <link rel="stylesheet" href="/fonts.css" />
     <title>未寄</title>
     <script>
       // 在第一次繪製前決定主題，避免深色模式使用者看到淺色閃一下。

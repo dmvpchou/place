@@ -36,21 +36,17 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,woff2}'],
+        // 字體有 213 個分片、共 5.6MB，全部 precache 等於要使用者第一次開就
+        // 下載一整套中文字。它們改用 runtime cache：抓過哪片就留哪片。
+        globPatterns: ['**/*.{js,css,html,png,svg}'],
         runtimeCaching: [
           {
-            // 字體樣式表：內容會隨瀏覽器改版，取回後再快取
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'google-fonts-stylesheets' },
-          },
-          {
-            // 字體檔本身不變，快取一年，離線時直接用
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
+            urlPattern: /\/fonts\/[^/]+\.woff2$/,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-webfonts',
-              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheName: 'weiji-fonts',
+              // 分片檔名固定、內容不變，可以放心長期快取
+              expiration: { maxEntries: 260, maxAgeSeconds: 60 * 60 * 24 * 365 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
